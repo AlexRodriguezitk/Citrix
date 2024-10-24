@@ -260,6 +260,21 @@ CREATE TABLE IF NOT EXISTS `citrix`.`empleados` (
   PRIMARY KEY (`id_empleados`))
 ENGINE = InnoDB;
 
+DELIMITER //
+
+CREATE TRIGGER after_inscripcion_insert
+AFTER INSERT ON citrix.inscripcion
+FOR EACH ROW
+BEGIN
+    UPDATE citrix.horarios
+    SET cantidad_alumnos = cantidad_alumnos + 1
+    WHERE id_horario = NEW.horarios_id_horario;
+END;
+
+//
+
+DELIMITER ;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
